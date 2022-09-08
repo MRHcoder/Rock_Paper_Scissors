@@ -17,7 +17,7 @@ class User:
 		self.image = pygame.image.load('images/player.bmp')
 		self.rect = self.image.get_rect()
 
-		self.rect.midbottom = self.screen_rect.midbottom
+		self.rect.midbottom = (self.screen_rect.centerx, self.screen_rect.bottom - 50)
 
 	def blitme(self):
 		"""Draw the user pic"""
