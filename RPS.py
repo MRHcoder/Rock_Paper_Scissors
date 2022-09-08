@@ -222,10 +222,8 @@ class RockPaperScissors:
                 self.settings.next_round = True
             elif self.cpu.choice[1] in self.settings.rules_advanced[self.user.choice]:
                 self.settings.results = 'You won!'
-                self.user.status = False
             else:
                 self.settings.results = 'You lost!'
-                self.user.status = False
         elif self.settings.game_mode == 'King of the Hill':
             round_choices = self.cpu.choice.copy()
             # round_choices = {k:v for (k,v) in self.cpu.choice.items() if v is not None}
