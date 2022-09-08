@@ -47,7 +47,7 @@ class GameInfo:
 	def prep_round(self):
 		"""Prep the current round"""
 		self.round = self.settings.round_number
-		round = f'Round #{self.round}'
+		round = f'Round #: {self.round}'
 		self.round_img = self.font.render(round, True, self.text_color, self.settings.bg_color)
 		self.round_rect = self.round_img.get_rect()
 		self.round_rect.left = self.screen_rect.left + 10

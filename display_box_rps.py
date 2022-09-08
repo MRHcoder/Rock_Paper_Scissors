@@ -67,7 +67,7 @@ class Results(DisplayBox):
 	def show_results(self):
 		"""Draw the display to the screen"""
 		self.screen.blit(self.display_image, self.display_rect)
-		if self.settings.results != 'Tie! Go again':
+		if 'You lost!' in self.settings.results or self.settings.results == 'You won!':
 			self.screen.blit(self.play_image, self.play_rect)
 
 

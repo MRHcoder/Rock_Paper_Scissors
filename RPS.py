@@ -8,7 +8,7 @@ from cpu_rps import CPU
 from start_buttons_rps import PlayButton, ModeStyleButtons, PlusMinusButtons, OneVsOneButton, KothButton, \
     ClassicButton, AdvancedButton
 from user_rps import User
-from input_box_rps import InputBox
+# from input_box_rps import InputBox
 from choice_buttons_rps import Choices
 from display_box_rps import DisplayBox, CpuCount, Results, StyleRules, ModeRules, KothInstructions
 from show_choice_rps import ShowChoice
@@ -52,8 +52,8 @@ class RockPaperScissors:
         self.round_results = Results(self)
 
         # Username input box
-        self.input = InputBox(self)
-        group = pygame.sprite.Group(self.input)
+        # self.input = InputBox(self)
+        # group = pygame.sprite.Group(self.input)
 
         # Game mode & style rules
         self.style_rules = StyleRules(self)
@@ -76,7 +76,7 @@ class RockPaperScissors:
             self._update_screen()
 
             if self.settings.next_round:
-                sleep(1.5)
+                sleep(2)
                 self._new_round()
                 self.settings.next_round = False
 
@@ -287,6 +287,7 @@ class RockPaperScissors:
         self.settings.new_game()
         self.cpu.reset_cpu()
         self.cpu_count.prep_count()
+        self.gi.prep_round()
 
     def _update_screen(self):
         """Update screen after events occur"""
