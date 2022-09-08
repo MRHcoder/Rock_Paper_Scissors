@@ -11,8 +11,8 @@ class CPU:
 		self.screen = rps.screen
 		self.screen_width = self.screen.get_width()
 		self.screen_rect = rps.screen.get_rect()
-		self.game_mode_classic = list(self.settings.classic_mode())
-		self.game_mode_advanced = list(self.settings.advanced_mode())
+		self.game_style_classic = list(self.settings.classic())
+		self.game_style_advanced = list(self.settings.advanced())
 
 		# Initial settings and counters used to place CPUs
 		self.number_text_color = (0, 0, 0)
@@ -33,8 +33,8 @@ class CPU:
 		if self.number > 0:
 			self.cpu_image = pygame.image.load('images/computer.bmp').convert()
 			self.cpu_rect = self.cpu_image.get_rect()
-			self.cpu_rect.midtop = ((self.screen_width * (self.number + self.count)) / (2 *
-																					   self.settings.cpu_players), 0)
+			self.cpu_rect.midtop = ((self.screen_width * (self.number + self.count)) / (2 * self.settings.cpu_players),
+									self.cpu_rect.height * .85)
 			number = f'CPU#: {self.number}'
 			self.cpu_number = self.number_font.render(number, True, self.number_text_color)
 			self.cpu_number_rect = self.cpu_number.get_rect()
@@ -50,7 +50,7 @@ class CPU:
 
 	def cpu_choice(self):
 		"""Makes the computer choose an option based on the game mode"""
-		if self.settings.game_mode == 'Classic':
-			self.choice[self.number] = random.choice(self.game_mode_classic)
-		elif self.settings.game_mode == 'Advanced':
-			self.choice[self.number] = random.choice(self.game_mode_advanced)
+		if self.settings.game_style == 'Classic':
+			self.choice[self.number] = random.choice(self.game_style_classic)
+		elif self.settings.game_style == 'Advanced':
+			self.choice[self.number] = random.choice(self.game_style_advanced)
