@@ -268,7 +268,8 @@ class RockPaperScissors:
                                 # next round
                         self.settings.results = f'You made it to the next round!'
                         self.settings.next_round = True
-                        self.settings.remaining_players -= 1
+                        self.settings.remaining_players = len([cpu for cpu in self.cpu.choice.values() if cpu is not
+                                                               None]) + 1
                         self.gi.prep_players()
 
         self.round_results.prep_results()
