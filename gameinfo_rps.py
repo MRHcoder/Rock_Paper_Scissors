@@ -28,7 +28,7 @@ class GameInfo:
 		self.quit_rect.bottom = self.screen_rect.bottom - 10
 
 	def prep_game(self):
-		"""Prep the game mode & game style"""
+		"""Prep the game mode & game style displays"""
 		self.mode = self.settings.game_mode
 		self.style = self.settings.game_style
 		mode = f'Game Mode: {self.mode}'
@@ -63,6 +63,7 @@ class GameInfo:
 		self.players_rect.bottom = self.round_rect.top - 5
 
 	def show_info(self):
+		"""Display all of the game info"""
 		self.screen.blit(self.mode_img, self.mode_rect)
 		self.screen.blit(self.style_img, self.style_rect)
 		self.screen.blit(self.quit_img, self.quit_rect)

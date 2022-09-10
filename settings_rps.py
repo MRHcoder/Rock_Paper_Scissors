@@ -5,7 +5,7 @@ class Settings:
 		"""setting the static settings"""
 		self.bg_color = (220, 220, 220)
 
-		# Keys of the dictionaries are winners
+		# Keys of the dictionaries are winners over their values
 		self.rules_classic = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
 		self.rules_advanced = {'rock': ['scissors', 'lizard'], 'paper': ['rock', 'spock'], 'scissors': ['paper',
 							'lizard'], 'lizard': ['spock', 'paper'], 'spock': ['scissors', 'rock']}

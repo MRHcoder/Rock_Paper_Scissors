@@ -15,8 +15,8 @@ class InputBox():
 		self.font = pygame.font.SysFont(None, 72)
 		self.rect = pygame.Rect(0, 0, self.width, self.height)
 		self.rect.center = self.screen_rect.center
-		self.active = False
-		self.name = False
+		self.active = False  # Controls if the box has been clicked
+		self.name = False  # Controls if the user finished entering their name
 		self.text = ''
 		self.render_text()
 
@@ -27,6 +27,6 @@ class InputBox():
 		self.text_rect.center = self.rect.center
 
 	def show_text(self):
-		"""Draw the text to the screen"""
+		"""Draw the text and box to the screen"""
 		self.screen.fill(self.box_color, self.rect)
 		self.screen.blit(self.text_img, self.text_rect)

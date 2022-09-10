@@ -23,6 +23,7 @@ class CPU:
 		self.cpu_choice()
 
 	def reset_cpu(self):
+		"""Resets all cpu settings"""
 		self.number = 0
 		self.count = 0
 		self.position = {}
@@ -30,7 +31,7 @@ class CPU:
 
 	def prep_cpu(self):
 		"""Numbers and places the cpu"""
-		if self.number > 0:
+		if self.number > 0:  # Ignore the initial instantiated cpu
 			self.cpu_image = pygame.image.load('images/computer.bmp').convert()
 			self.cpu_rect = self.cpu_image.get_rect()
 			self.cpu_rect.midtop = ((self.screen_width * (self.number + self.count)) / (2 * self.settings.cpu_players),

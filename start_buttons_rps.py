@@ -19,13 +19,11 @@ class PlayButton:
 		self.rect = pygame.Rect(0, 0, self.width, self.height)
 		self.rect.center = self.screen_rect.center
 
-		# Button message
-		self.msg = 'Play'
 		self._prep_msg()
 
 	def _prep_msg(self):
 		"""Creating the message to display"""
-		self.msg_image = self.font.render(self.msg, True, self.text_color, self.button_color)
+		self.msg_image = self.font.render('Play', True, self.text_color, self.button_color)
 		self.msg_image_rect = self.msg_image.get_rect()
 		self.msg_image_rect.center = self.rect.center
 
@@ -56,7 +54,6 @@ class OneVsOneButton(ModeStyleButtons):
 	def __init__(self, rps):
 		super().__init__(rps)
 		self.mode = '1 vs 1'
-		self.clicked = False
 
 		# Position
 		self.rect = pygame.Rect(0, 0, self.width, self.height)
