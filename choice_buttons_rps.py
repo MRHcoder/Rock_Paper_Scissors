@@ -7,14 +7,19 @@ class Choices:
 	def __init__(self, rps):
 		"""Initialize the choice buttons for the game"""
 
+		# Initial settings
 		self.settings = rps.settings
 		self.screen = rps.screen
 		self.screen_rect = self.screen.get_rect()
 		self.screen_width = self.screen.get_width()
 		self.screen_middle = self.screen_rect.centerx
+
+		# Gamde mode & styles
 		self.game_style = self.settings.game_style
 		self.game_style_classic = self.settings.classic()
 		self.game_style_advanced = self.settings.advanced()
+
+		# Position of the buttons
 		self.position = {}
 
 		self._button_positions()
@@ -28,8 +33,8 @@ class Choices:
 				self.option_rect = self.option.get_rect()
 				self.option_rect.centerx = self.screen_width * (count / 6)
 				self.option_rect.centery = self.screen_rect.centery
-				self.position[option] = {self.option: self.option_rect}  # saves the choice as key and surface and
-				# rect as key:value pair
+				self.position[option] = {self.option: self.option_rect}  # saves the choice as key, and saves surface
+				# and rect as key:value pair
 				count += 2
 		elif self.game_style == 'Advanced':
 			for option in self.game_style_advanced:
@@ -37,8 +42,8 @@ class Choices:
 				self.option_rect = self.option.get_rect()
 				self.option_rect.centerx = self.screen_width * (count / 10)
 				self.option_rect.centery = self.screen_rect.centery
-				self.position[option] = {self.option: self.option_rect}  # saves the choice as key and surface and
-				# rect as key:value pair
+				self.position[option] = {self.option: self.option_rect}  # saves the choice as key, and saves surface
+				# and rect as key:value pair
 				count += 2
 
 	def draw_user_choices(self):

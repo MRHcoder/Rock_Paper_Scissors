@@ -28,7 +28,7 @@ class CpuCount(DisplayBox):
 	def prep_count(self):
 		"""Showing the numbers of CPUs"""
 		if self.settings.cpu_players == 1:
-			number_cpus = '2'
+			number_cpus = '2'  # Minimum CPU count allowed
 		else:
 			number_cpus = str(self.settings.cpu_players)
 		self.display_image = self.font.render(number_cpus, True, self.text_color, self.settings.bg_color)
@@ -52,7 +52,7 @@ class Results(DisplayBox):
 		self._play_again()
 
 	def prep_results(self):
-		"""Showing the results"""
+		"""Prepping the results to be displayed"""
 		self.display_image = self.font.render(self.settings.results, True, self.text_color, self.settings.bg_color)
 		self.display_rect = self.display_image.get_rect()
 		self.display_rect.center = self.screen_rect.center
@@ -103,7 +103,7 @@ class StyleRules(DisplayBox):
 
 		# Blit the classic rules
 		classic_words = self.classic_rules.splitlines()
-		y = self.classic_button.rect.bottom + 15
+		y = self.classic_button.rect.bottom + 15  # y setting for the first line
 		for line in classic_words:
 			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
 			line_width, line_height = line_surface.get_size()
@@ -114,7 +114,7 @@ class StyleRules(DisplayBox):
 
 		# Blit the advanced rules
 		advanced_words = self.advanced_rules.splitlines()
-		y = self.advanced_button.rect.bottom + 15
+		y = self.advanced_button.rect.bottom + 15  # y setting for the first line
 		for line in advanced_words:
 			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
 			line_width, line_height = line_surface.get_size()
@@ -125,7 +125,7 @@ class StyleRules(DisplayBox):
 
 
 class ModeRules(DisplayBox):
-	"""Class for the rules of the different game styles"""
+	"""Class for the rules of the different game modes"""
 
 	def __init__(self, rps):
 		"""Initialize the settings for the rules displays"""
@@ -175,7 +175,7 @@ class KothInstructions(DisplayBox):
 
 		# Blit the instructions
 		instructions = self.instructions.splitlines()
-		y = self.screen_rect.centery / 2.2
+		y = self.screen_rect.centery / 2.2  # y setting for the first line
 		for line in instructions:
 			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
 			line_width, line_height = line_surface.get_size()
@@ -202,7 +202,7 @@ class NamePrompt(DisplayBox):
 
 		# Blit the instructions
 		instructions = self.instructions.splitlines()
-		y = self.screen_rect.height / 4
+		y = self.screen_rect.height / 4  # y setting for the first line
 		for line in instructions:
 			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
 			line_width, line_height = line_surface.get_size()

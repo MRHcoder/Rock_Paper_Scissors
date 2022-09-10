@@ -28,7 +28,7 @@ class ShowChoice:
 	def _position_choices(self, rps):
 		"""Position each player choice onto the screen"""
 		for choice in self.choices:
-			if choice == self.settings.player_count:
+			if choice == self.settings.player_count:  # Shows the User's choice
 				if self.choices[choice] is None:
 					self.choice = self.font.render('ELIMINATED', True, self.text_color, self.settings.bg_color)
 				else:
@@ -36,7 +36,7 @@ class ShowChoice:
 				self.choice_rect = self.choice.get_rect()
 				self.choice_rect.midbottom = rps.user.rect.midbottom
 				self.choices[choice] = [self.choice, self.choice_rect]
-			else:
+			else:  # Shows CPU choices
 				if self.choices[choice] is None:
 					self.choice = self.font.render('ELIMINATED', True, self.text_color, self.settings.bg_color)
 				else:

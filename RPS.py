@@ -42,7 +42,7 @@ class RockPaperScissors:
         self.one_v_one_button = OneVsOneButton(self)
         self.koth_button = KothButton(self)
 
-        # The +/- buttons
+        # CPU counter info
         self.plus_button = PlusMinusButtons(self, '+')
         self.minus_button = PlusMinusButtons(self, '-')
         self.display_box = DisplayBox(self)
@@ -53,7 +53,6 @@ class RockPaperScissors:
 
         # Username input box
         self.input = InputBox(self)
-        # group = pygame.sprite.Group(self.input)
 
         # Game mode & style rules
         self.style_rules = StyleRules(self)
@@ -69,7 +68,7 @@ class RockPaperScissors:
         while True:  # Watch for keyboard and mouse events
             self._check_events()
 
-            if self.settings.ongoing_turn:
+            if self.settings.ongoing_turn:  # User choice made for this turn, run rest of the round
                 self._computer_choice()
                 self._compare_choices()
                 self.settings.ongoing_turn = False
@@ -120,12 +119,13 @@ class RockPaperScissors:
             self.settings.game_active = True
 
     def _check_input(self, mouse_pos):
-        """allows user to type in their name"""
+        """Activates the name entry box"""
         text_box_clicked = self.input.rect.collidepoint(mouse_pos)
         if text_box_clicked:
             self.input.active = True
 
     def _get_name(self, event):
+        """Reads the name input by the user and saves it for display"""
         if event.key == pygame.K_RETURN:
             self.input.active = False
             self.input.name = True
@@ -144,7 +144,6 @@ class RockPaperScissors:
 
         if one_v_one_button_clicked:
             self.settings.game_mode = '1 vs 1'
-            self.one_v_one_button.clicked = True
         elif koth_button_clicked:
             self.settings.game_mode = 'King of the Hill'
             self.settings.game_style = 'Classic'
@@ -175,11 +174,11 @@ class RockPaperScissors:
         """Collects the # of CPUs the user chooses"""
         plus_button_clicked = self.plus_button.rect.collidepoint(mouse_pos)
         minus_button_clicked = self.minus_button.rect.collidepoint(mouse_pos)
-        if self.settings.cpu_players == 2:
+        if self.settings.cpu_players == 2:  # Lower limit to cpu players
             if plus_button_clicked:
                 self.settings.cpu_players += 1
                 self.cpu_count.prep_count()
-        elif self.settings.cpu_players == 5:
+        elif self.settings.cpu_players == 5:  # Upper limit to cpu players
             if minus_button_clicked:
                 self.settings.cpu_players -= 1
                 self.cpu_count.prep_count()
@@ -216,7 +215,7 @@ class RockPaperScissors:
         """Makes the CPU choose an option for the round"""
         for i in range(1, self.settings.player_count):
             self.cpu.number = i
-            if self.cpu.choice[i] is None:
+            if self.cpu.choice[i] is None:  # If the cpu was already eliminated in a previous round ignore them
                 continue
             else:
                 self.cpu.cpu_choice()
@@ -236,7 +235,6 @@ class RockPaperScissors:
                 self.settings.results = 'You lost!'
         elif self.settings.game_mode == 'King of the Hill':
             round_choices = self.cpu.choice.copy()
-            # round_choices = {k:v for (k,v) in self.cpu.choice.items() if v is not None}
             round_choices[self.settings.player_count] = self.user.choice
             self.show = ShowChoice(self, round_choices)
             if all(choice in round_choices.values() for choice in self.settings.rules_classic):  # If all the
@@ -251,24 +249,24 @@ class RockPaperScissors:
                 try:
                     winner, loser = set([choice for choice in round_choices.values() if choice is not None])  # find
                 # the winning choice
-                except ValueError:  # Catches instances where the set only contains 1 value
+                except ValueError:  # Catches instances where the set only contains 1 value. This means CPU 1 was
+                    # eliminated but all the remaining players picked the same choice
                     self.settings.results = f'{self.settings.remaining_players}-way Tie! Go again'
                     self.settings.next_round = True
                 else:
                     if winner in self.settings.rules_classic and loser == self.settings.rules_classic[winner]:
                         winner = winner
                     else:
-                        winner = loser
+                        winner = loser  # Correcting the winner variable as it wasn't established properly in the set
                     if len([choice for choice in round_choices.values() if choice == winner]) == 1:  # If only 1 winner
                         # announce it and end the game
                         if round_choices[self.settings.player_count] == winner:
                             self.settings.results = 'You won!'
                         else:
-                            winning_cpu = [player for player, choice in round_choices.items() if choice == winner]  #
-                            # WASTE OF MEMORY LOOPING AND SAVING THIS TO LIST. LOOK FOR WAY TO REFACTOR AND MAKE IT JUST
-                            # PART OF THE RESULTS BELOW*****************************************************************
+                            winning_cpu = [player for player, choice in round_choices.items() if choice == winner]
                             self.settings.results = f'You lost! CPU#: {winning_cpu[0]} won!'
-                    elif not round_choices[self.settings.player_count] == winner:
+                    elif not round_choices[self.settings.player_count] == winner:  # Winner not established but
+                        # player eliminated
                         self.settings.results = 'You lost!'
                     else:  # Find out which players made it to the next round
                         for player_number in self.cpu.choice:
@@ -301,7 +299,7 @@ class RockPaperScissors:
         """Update screen after events occur"""
         self.screen.fill(self.settings.bg_color)
 
-        # Drawing the buttons at the beginning of a game or new round
+        # Drawing all prompts, buttons, and texts based on current game status
         if not self.settings.game_active:
             self.play_button.draw_button()
         elif not self.input.name:
