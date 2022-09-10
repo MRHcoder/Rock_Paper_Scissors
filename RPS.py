@@ -10,7 +10,7 @@ from start_buttons_rps import PlayButton, ModeStyleButtons, PlusMinusButtons, On
 from user_rps import User
 from input_box_rps import InputBox
 from choice_buttons_rps import Choices
-from display_box_rps import DisplayBox, CpuCount, Results, StyleRules, ModeRules, KothInstructions
+from display_box_rps import DisplayBox, CpuCount, Results, StyleRules, ModeRules, KothInstructions, NamePrompt
 from show_choice_rps import ShowChoice
 from gameinfo_rps import GameInfo
 
@@ -53,7 +53,7 @@ class RockPaperScissors:
 
         # Username input box
         self.input = InputBox(self)
-        group = pygame.sprite.Group(self.input)
+        # group = pygame.sprite.Group(self.input)
 
         # Game mode & style rules
         self.style_rules = StyleRules(self)
@@ -62,6 +62,7 @@ class RockPaperScissors:
         # Other texts
         self.instructions = KothInstructions(self)
         self.gi = GameInfo(self)
+        self.name_prompt = NamePrompt(self)
 
     def run_game(self):
         """Main game loop"""
@@ -76,7 +77,7 @@ class RockPaperScissors:
             self._update_screen()
 
             if self.settings.next_round:
-                sleep(1.5)
+                sleep(2)
                 self._new_round()
                 self.settings.next_round = False
 
@@ -86,17 +87,22 @@ class RockPaperScissors:
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q or event.key == pygame.K_n:
-                    sys.exit()
-                elif event.key == pygame.K_RETURN:
-                    self._create_cpus()
-                    self.settings.cpu_options = True
-                elif event.key == pygame.K_y:
-                    self._new_game()
+                if self.input.active:
+                    self._get_name(event)
+                else:
+                    if event.key == pygame.K_q:
+                        sys.exit()
+                    elif event.key == pygame.K_RETURN:
+                        self._create_cpus()
+                        self.settings.cpu_options = True
+                    elif event.key == pygame.K_y:
+                        self._new_game()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if not self.settings.game_active:
                     self._check_play_button(mouse_pos)
+                elif not self.input.name:
+                    self._check_input(mouse_pos)
                 elif not self.settings.game_mode:
                     self._check_game_mode(mouse_pos)
                 elif not self.settings.game_style:
@@ -113,19 +119,23 @@ class RockPaperScissors:
         if play_button_clicked:
             self.settings.game_active = True
 
-    # def _check_input(self, mouse_pos, event):
-    #     """allows user to type in their name"""
-    #     text_box_clicked = self.input.rect.collidepoint(mouse_pos)
-    #     if text_box_clicked and self.settings.game_active:
-    #         self.active = True
-    #         if event.type == pygame.KEYDOWN and self.active:
-    #             if event.key == pygame.K_RETURN:
-    #                 self.active = False
-    #             elif event.key == pygame.K_BACKSPACE:
-    #                 self.text = self.text[:-1]
-    #             else:
-    #                 self.text += event.unicode
-    #             self.input.render_text()
+    def _check_input(self, mouse_pos):
+        """allows user to type in their name"""
+        text_box_clicked = self.input.rect.collidepoint(mouse_pos)
+        if text_box_clicked:
+            self.input.active = True
+
+    def _get_name(self, event):
+        if event.key == pygame.K_RETURN:
+            self.input.active = False
+            self.input.name = True
+            self.user.save_name(self.input.text)
+        elif event.key == pygame.K_BACKSPACE:
+            self.input.text = self.input.text[:-1]
+            self.input.render_text()
+        else:
+            self.input.text += event.unicode
+            self.input.render_text()
 
     def _check_game_mode(self, mouse_pos):
         """chooses the game mode the user clicks on - either 1v1 or king of the hill"""
@@ -222,10 +232,8 @@ class RockPaperScissors:
                 self.settings.next_round = True
             elif self.cpu.choice[1] in self.settings.rules_advanced[self.user.choice]:
                 self.settings.results = 'You won!'
-                self.user.status = False
             else:
                 self.settings.results = 'You lost!'
-                self.user.status = False
         elif self.settings.game_mode == 'King of the Hill':
             round_choices = self.cpu.choice.copy()
             # round_choices = {k:v for (k,v) in self.cpu.choice.items() if v is not None}
@@ -251,7 +259,6 @@ class RockPaperScissors:
                         winner = winner
                     else:
                         winner = loser
-
                     if len([choice for choice in round_choices.values() if choice == winner]) == 1:  # If only 1 winner
                         # announce it and end the game
                         if round_choices[self.settings.player_count] == winner:
@@ -270,7 +277,8 @@ class RockPaperScissors:
                                 # next round
                         self.settings.results = f'You made it to the next round!'
                         self.settings.next_round = True
-                        self.settings.remaining_players -= 1
+                        self.settings.remaining_players = len([cpu for cpu in self.cpu.choice.values() if cpu is not
+                                                               None]) + 1
                         self.gi.prep_players()
 
         self.round_results.prep_results()
@@ -287,6 +295,7 @@ class RockPaperScissors:
         self.settings.new_game()
         self.cpu.reset_cpu()
         self.cpu_count.prep_count()
+        self.gi.prep_round()
 
     def _update_screen(self):
         """Update screen after events occur"""
@@ -295,6 +304,9 @@ class RockPaperScissors:
         # Drawing the buttons at the beginning of a game or new round
         if not self.settings.game_active:
             self.play_button.draw_button()
+        elif not self.input.name:
+            self.name_prompt.show_instructions()
+            self.input.show_text()
         elif not self.settings.game_mode:
             self.one_v_one_button.draw_button()
             self.koth_button.draw_button()

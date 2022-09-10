@@ -67,7 +67,7 @@ class Results(DisplayBox):
 	def show_results(self):
 		"""Draw the display to the screen"""
 		self.screen.blit(self.display_image, self.display_rect)
-		if self.settings.results != 'Tie! Go again':
+		if 'You lost!' in self.settings.results or self.settings.results == 'You won!':
 			self.screen.blit(self.play_image, self.play_rect)
 
 
@@ -176,6 +176,33 @@ class KothInstructions(DisplayBox):
 		# Blit the instructions
 		instructions = self.instructions.splitlines()
 		y = self.screen_rect.centery / 2.2
+		for line in instructions:
+			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
+			line_width, line_height = line_surface.get_size()
+			line_surface_rect = line_surface.get_rect()
+			line_surface_rect.centerx = self.screen_rect.centerx
+			self.screen.blit(line_surface, (line_surface_rect.x, y))
+			y += line_height  # Move to the next line
+
+
+class NamePrompt(DisplayBox):
+	"""Class for the prompt for user to enter their name"""
+
+	def __init__(self, rps):
+		"""Initialize the settings for the prompt"""
+		super().__init__(rps)
+
+		self.font = pygame.font.SysFont(None, 48)
+
+		self.instructions = 'Click the box below to type in your name.\n\n ' \
+			'Press "enter" to continue.'
+
+	def show_instructions(self):
+		"""Draw the display to the screen"""
+
+		# Blit the instructions
+		instructions = self.instructions.splitlines()
+		y = self.screen_rect.height / 4
 		for line in instructions:
 			line_surface = self.font.render(line, True, self.text_color, self.settings.bg_color)
 			line_width, line_height = line_surface.get_size()
