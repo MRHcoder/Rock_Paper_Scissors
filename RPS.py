@@ -222,10 +222,10 @@ class RockPaperScissors:
 
     def _compare_choices(self):
         """Compares the player's choice to the CPU's choice to determine winner(s)"""
+        round_choices = self.cpu.choice.copy()
+        round_choices[self.settings.player_count] = self.user.choice
+        self.show = ShowChoice(self, round_choices)
         if self.settings.game_mode == '1 vs 1':
-            round_choices = self.cpu.choice.copy()
-            round_choices[self.settings.player_count] = self.user.choice
-            self.show = ShowChoice(self, round_choices)
             if self.user.choice == self.cpu.choice[1]:
                 self.settings.results = 'Tie! Go again'
                 self.settings.next_round = True
@@ -233,10 +233,7 @@ class RockPaperScissors:
                 self.settings.results = 'You won!'
             else:
                 self.settings.results = 'You lost!'
-        elif self.settings.game_mode == 'King of the Hill':
-            round_choices = self.cpu.choice.copy()
-            round_choices[self.settings.player_count] = self.user.choice
-            self.show = ShowChoice(self, round_choices)
+        else:
             if all(choice in round_choices.values() for choice in self.settings.rules_classic):  # If all the
                 # possible options are chosen
                 self.settings.results = f'No winners! Go again'
@@ -254,10 +251,8 @@ class RockPaperScissors:
                     self.settings.results = f'{self.settings.remaining_players}-way Tie! Go again'
                     self.settings.next_round = True
                 else:
-                    if winner in self.settings.rules_classic and loser == self.settings.rules_classic[winner]:
-                        winner = winner
-                    else:
-                        winner = loser  # Correcting the winner variable as it wasn't established properly in the set
+                    if winner == self.settings.rules_classic[loser]:  # Checking to see if winner is the wrong value
+                        winner = loser
                     if len([choice for choice in round_choices.values() if choice == winner]) == 1:  # If only 1 winner
                         # announce it and end the game
                         if round_choices[self.settings.player_count] == winner:
