@@ -91,7 +91,7 @@ class RockPaperScissors:
                 else:
                     if event.key == pygame.K_q:
                         sys.exit()
-                    elif event.key == pygame.K_RETURN:
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                         self._create_cpus()
                         self.settings.cpu_options = True
                     elif event.key == pygame.K_y:
@@ -126,7 +126,7 @@ class RockPaperScissors:
 
     def _get_name(self, event):
         """Reads the name input by the user and saves it for display"""
-        if event.key == pygame.K_RETURN:
+        if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
             self.input.active = False
             self.input.name = True
             self.user.save_name(self.input.text)
