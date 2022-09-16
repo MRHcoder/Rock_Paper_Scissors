@@ -14,7 +14,7 @@ class ShowChoice:
 
 		# Font settings
 		self.text_color = (250, 0, 0)
-		self.font = pygame.font.SysFont(None, 64)
+		self.font = pygame.font.SysFont(None, 42)
 
 		# Choice of the round passed in as a dictionary
 		self.choices = choices.copy()

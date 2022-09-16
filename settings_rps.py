@@ -4,6 +4,8 @@ class Settings:
 	def __init__(self):
 		"""setting the static settings"""
 		self.bg_color = (220, 220, 220)
+		self.screen_width = 1200
+		self.screen_height = 800
 
 		# Keys of the dictionaries are winners over their values
 		self.rules_classic = {'rock': 'scissors', 'paper': 'rock', 'scissors': 'paper'}
